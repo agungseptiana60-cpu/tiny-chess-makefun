@@ -14,7 +14,7 @@ def parse(f):
 def uci(m):f,t,p=m;return chr(97+f%8)+str(8-f//8)+chr(97+t%8)+str(8-t//8)+(p or"")
 def atk(b,s,w):
  x,y=s%8,s//8;P,N,K,Q='PNKQ'if w else'pnkq'
- for ds,ch in((((1,-1),(-1,-1))if w else((1,1),(-1,1)),P),(KN,N),(D8,K)):
+ for ds,ch in((((1,1),(-1,1))if w else((1,-1),(-1,-1)),P),(KN,N),(D8,K)):
   for dx,dy in ds:
    if 0<=x+dx<8 and 0<=y+dy<8 and b[(y+dy)*8+x+dx]==ch:return 1
  for dx,dy in D8:
@@ -70,7 +70,9 @@ def do(st,m):
   if f==s or t==s:nc=nc.replace(ch,'')
  return nb,not w,nc,t if c.upper()=='P'and abs(t-f)==16 else-1
 def leg(st):
- b,w,ca,ep=st;return[m for m in gen(b,w,ca,ep)if not atk((n:=do(st,m))[0],n[0].index('K'if w else'k'),not w)]
+ b,w,ca,ep=st
+ if('K'if w else'k')not in b:return[]
+ return[m for m in gen(b,w,ca,ep)if not atk((n:=do(st,m))[0],n[0].index('K'if w else'k'),not w)]
 def ev(b):
  s=0
  for i,c in enumerate(b):
@@ -98,7 +100,6 @@ def sr(st,d,a,be):
  return a
 def ch(fen,lg):
  st=parse(fen);b,w,ca,ep=st;want={uci(m):m for m in leg(st)};cand=[want[u]for u in lg if u in want]
- if not cand:return lg[0]
  best=cand[0]
  for d in(1,2,3):
   N[0]=0;bs=-10**9
