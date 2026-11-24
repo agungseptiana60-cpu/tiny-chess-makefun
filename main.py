@@ -82,7 +82,7 @@ def ev(b):
   s+=V[u]+bn if w else-(V[u]+bn)
  return s
 N=[0]
-class A(Exception):pass
+class A(Exception):0
 def sr(st,d,a,be):
  b,w,ca,ep=st;N[0]+=1
  if N[0]>6000:raise A
