@@ -68,11 +68,9 @@ def do(st,m):
   for ch in('KQ'if w else'kq'):nc=nc.replace(ch,'')
  for s,ch in((63,'K'),(56,'Q'),(7,'k'),(0,'q')):
   if f==s or t==s:nc=nc.replace(ch,'')
- return nb,not w,nc,t if c.upper()=='P'and abs(t-f)==16 else-1
+ return nb,not w,nc,t+(8 if w else-8)if c.upper()=='P'and abs(t-f)==16 else-1
 def leg(st):
- b,w,ca,ep=st
- if('K'if w else'k')not in b:return[]
- return[m for m in gen(b,w,ca,ep)if not atk((n:=do(st,m))[0],n[0].index('K'if w else'k'),not w)]
+ b,w,ca,ep=st;return[]if('K'if w else'k')not in b else[m for m in gen(b,w,ca,ep)if not atk((n:=do(st,m))[0],n[0].index('K'if w else'k'),not w)]
 def ev(b):
  s=0
  for i,c in enumerate(b):
@@ -85,7 +83,7 @@ N=[0]
 class A(Exception):0
 def sr(st,d,a,be):
  b,w,ca,ep=st;N[0]+=1
- if N[0]>6000:raise A
+ if N[0]>12000:raise A
  if d<-2:return ev(b)if w else-ev(b)
  ms=leg(st)
  if not ms:return-99999 if atk(b,b.index('K'if w else'k'),not w)else 0
@@ -93,7 +91,7 @@ def sr(st,d,a,be):
   s=ev(b)if w else-ev(b)
   if s>=be:return be
   a=max(a,s);ms=[m for m in ms if b[m[1]]!='.'or m[2]]
- ms.sort(key=lambda m:-(V.get(b[m[1]].upper(),0)*10-V[b[m[0]].upper()]//10+(900 if m[2]else 0)))
+ ms.sort(key=lambda m:-(V.get(b[m[1]].upper(),0)*10-V[b[m[0]].upper()]//10))
  for m in ms:
   a=max(a,-sr(do(st,m),d-1,-be,-a))
   if a>=be:break
